@@ -6,12 +6,16 @@ import static org.junit.Assert.assertTrue;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.StepDefAnnotation;
 
-public class Stepdefs {
+@StepDefAnnotation
+public class Stepdefs
+{
 	private int totalSeatsAvailable = 100;
 	private int numSeatsBooked = 68;
 	private int numSeatsAvailable;
 	private int numSeatsRequested;
+	private int numSeatsOut = 0;
 	
 	/**************************************************************************
 	 * 
@@ -21,8 +25,9 @@ public class Stepdefs {
 	@Given("^that we do not have enough seats available$")
 	public void that_we_do_not_have_enough_seats_available() throws Exception {
 		numSeatsAvailable = MockedBookingSystem.getAvailability(
-													numSeatsBooked, 
-													totalSeatsAvailable);
+				numSeatsBooked, 
+				totalSeatsAvailable,
+				numSeatsOut);
 	}
 
 	@When("^we attempt to book too many seats$")
@@ -33,9 +38,9 @@ public class Stepdefs {
 	@Then("^the request is denied$")
 	public void the_request_is_denied() throws Exception {
 		boolean isBooked = MockedBookingSystem.bookSeats(
-												numSeatsRequested, 
-												numSeatsAvailable);
-		
+				numSeatsRequested, 
+				numSeatsAvailable);
+
 		assertFalse(isBooked);
 	}
 
@@ -54,12 +59,18 @@ public class Stepdefs {
 		totalSeatsAvailable = arg1;
 	}
 
+	@Given("^there are (\\d+) seats out of action$")
+	public void there_are_seats_out_of_action(int arg1) throws Exception {
+		numSeatsOut = arg1;
+	}
+
 	@When("^I try to book (\\d+) seats$")
 	public void i_try_to_book_seats(int arg1) throws Exception {
 		numSeatsRequested = arg1;
 		numSeatsAvailable = MockedBookingSystem.getAvailability(
 													numSeatsBooked, 
-													totalSeatsAvailable);
+													totalSeatsAvailable,
+													numSeatsOut);
 	}
 
 	@Then("^the booking request is false$")
@@ -67,7 +78,7 @@ public class Stepdefs {
 		boolean isBooked = MockedBookingSystem.bookSeats(
 												numSeatsRequested, 
 												numSeatsAvailable);
-		
+
 		assertFalse(isBooked);
 	}
 
@@ -80,3 +91,6 @@ public class Stepdefs {
 		assertTrue(isBooked);
 	}
 }
+
+
+

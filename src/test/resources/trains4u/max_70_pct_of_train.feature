@@ -12,16 +12,17 @@ Feature: Max 70% of entire train can be reserved
 	Scenario Outline: Max 70% of the train can be reserved
 		Given that the train has <booked> booked seats 
 		And the total capacity is <total> seats
+		And there are <out> seats out of action
 		When I try to book <requestedSeats> seats
 		Then the booking request is <status>
 		
 		Examples:
-			| booked	| total	| requestedSeats	| status	|
-			| 68			|	100		| 4								|	false		|
-			| 66			|	100		|	4								|	true		|
-			| 66			|	100		|	2								|	true		|
-			| 70			|	100		|	2								|	false		|
-			| 65			|	100		|	3								|	true		|
-			| 65			|	100		|	5								|	true		|
-			| 67			|	100		|	4								|	false		|
+			| booked	| total	| out		| requestedSeats	| status	|
+			| 698			|	1000	| 0			| 4								|	false		|
+			| 696			|	1000	|	0			| 4								|	true		|
+			| 575			|	1000	|	125		| 2								|	false		|
+			| 696			|	1000	|	4			| 2								|	false		|
+			| 650			|	1000	|	0			| 3								|	true		|
+			| 650			|	1000	|	0			| 5								|	true		|
+			| 697			|	1000	|	0			| 4								|	false		|
 		

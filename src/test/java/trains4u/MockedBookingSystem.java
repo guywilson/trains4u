@@ -1,20 +1,18 @@
 package trains4u;
 
-
 public class MockedBookingSystem
 {
 	final static int maximumReservationPercent = 70;
 	
-	static int getAvailability(int numSeatsBooked, int totalSeatsAvailable) {
-		int pctSeatsBooked;
+	static int getAvailability(int numSeatsBooked, int totalSeatsAvailable, int numSeatsOut) {
+		int numSeatsAvailable = 
+				((maximumReservationPercent * totalSeatsAvailable) / 100) - numSeatsBooked;
 		
-		pctSeatsBooked = (numSeatsBooked * 100) / totalSeatsAvailable;
-		
-		return ((maximumReservationPercent - pctSeatsBooked) * totalSeatsAvailable) / 100;
+		return numSeatsAvailable - numSeatsOut;
 	}
 	
-	static boolean bookSeats(int numSeatsRequested, int availability) {
-		if (numSeatsRequested <= availability) {
+	static boolean bookSeats(int numSeatsRequested, int numSeatsAvailable) {
+		if (numSeatsRequested <= numSeatsAvailable) {
 			return true;
 		}
 		else {
@@ -22,3 +20,7 @@ public class MockedBookingSystem
 		}
 	}
 }
+
+
+
+
